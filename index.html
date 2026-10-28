@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shanoi Jansen — Portfolio</title>
+<style>
+@font-face{font-family:"Anybody";src:url(fonts/anybody-latin-wdth-normal.woff2) format("woff2");font-weight:100 900;font-stretch:50% 150%;font-display:swap}
+@font-face{font-family:"Familjen Grotesk";src:url(fonts/familjen-grotesk-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Familjen Grotesk";src:url(fonts/familjen-grotesk-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Familjen Grotesk";src:url(fonts/familjen-grotesk-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+:root{
+  --paper:#F3F4F7;
+  --ink:#16171C;
+  --blue:#2433FF;
+  --pink:#FF5BA7;
+  --grey:#8B8E99;
+  --line:#D5D7DE;
+  --display:"Anybody",system-ui,sans-serif;
+  --body:"Familjen Grotesk",system-ui,sans-serif;
+  --pad:clamp(20px,4vw,56px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{display:block;max-width:100%}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;
+  padding:16px var(--pad);background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px)}
+.nav .logo{font:800 20px/1 var(--display);font-stretch:130%;text-decoration:none;letter-spacing:-.01em}
+.nav ul{display:flex;gap:clamp(14px,3vw,32px);list-style:none}
+.nav ul a{text-decoration:none;font-weight:500}
+.nav ul a[aria-current="page"]{color:var(--blue);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
+
+.view{display:none}
+.view.active{display:block}
+
+/* hero — the one loud thing: riso overprint misregistration */
+.hero{position:relative;padding:clamp(40px,8vw,110px) var(--pad) clamp(48px,7vw,96px);overflow:hidden}
+.overprint{position:relative;font-family:var(--display);font-weight:900;font-stretch:150%;
+  font-size:clamp(48px,12.2vw,220px);line-height:.84;letter-spacing:-.035em}
+.overprint span{display:block}
+.overprint .layer{position:absolute;inset:0;color:var(--pink);mix-blend-mode:multiply;
+  transform:translate(var(--dx,9px),var(--dy,7px));transition:transform .5s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.overprint .base{position:relative;color:var(--blue);mix-blend-mode:multiply}
+.reg{position:absolute;width:28px;height:28px;border:1.5px solid var(--ink);border-radius:50%}
+.reg::before,.reg::after{content:"";position:absolute;background:var(--ink)}
+.reg::before{left:50%;top:-8px;bottom:-8px;width:1.5px;transform:translateX(-50%)}
+.reg::after{top:50%;left:-8px;right:-8px;height:1.5px;transform:translateY(-50%)}
+.reg.tr{top:22px;right:var(--pad)}
+.reg.bl{bottom:22px;left:calc(var(--pad) - 4px)}
+.hero-foot{display:flex;flex-wrap:wrap;gap:24px 48px;justify-content:space-between;align-items:end;margin-top:clamp(28px,4vw,56px)}
+.hero-foot p{max-width:34ch;font-size:clamp(19px,1.8vw,24px);line-height:1.35}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-block;padding:14px 22px;border:2px solid var(--ink);border-radius:999px;text-decoration:none;font-weight:600;transition:background .2s,color .2s}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn:hover{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* doors */
+.doors{border-top:2px solid var(--ink)}
+.door{display:grid;grid-template-columns:1fr auto;gap:12px 32px;align-items:end;padding:clamp(28px,4vw,48px) var(--pad);
+  border-bottom:2px solid var(--ink);text-decoration:none;position:relative;overflow:hidden}
+.door h2{font:850 clamp(36px,7.4vw,124px)/.9 var(--display);white-space:nowrap;height:.9em;font-stretch:60%;letter-spacing:-.02em;transition:font-stretch .45s cubic-bezier(.2,.7,.2,1),color .3s}
+.door:hover h2,.door:focus-visible h2{font-stretch:150%;color:var(--blue)}
+.door ul{list-style:none;text-align:right;color:var(--grey);font-weight:500}
+.door ul li{line-height:1.4}
+
+/* about / contact */
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:clamp(28px,5vw,80px);padding:clamp(56px,8vw,120px) var(--pad)}
+.portrait{aspect-ratio:4/5;background:var(--ink);position:relative;overflow:hidden}
+.portrait img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{background-color:var(--c2,#fff);background-image:radial-gradient(var(--c1,var(--blue)) 1.3px,transparent 1.6px);background-size:9px 9px;
+  display:flex;align-items:flex-end;padding:14px;color:var(--ink);font-size:14px;font-weight:600}
+.ph span{background:var(--paper);padding:4px 9px;border-radius:999px}
+.about h3,.section-head h1{font:800 clamp(36px,5vw,64px)/.95 var(--display);font-stretch:120%;letter-spacing:-.02em;margin-bottom:24px}
+.about p{max-width:60ch;margin-bottom:16px}
+.skills{display:flex;flex-wrap:wrap;gap:4px 0;margin:32px 0 0;padding-top:18px;border-top:1.5px solid var(--ink);list-style:none;max-width:60ch}
+.skills li{font:700 clamp(17px,1.5vw,21px)/1.35 var(--display);font-stretch:110%}
+.skills li:not(:last-child)::after{content:"/";color:var(--pink);font-weight:800;margin:0 .45em}
+.contact{background:var(--blue);color:#fff;padding:clamp(56px,8vw,120px) var(--pad)}
+.contact-band{background:var(--blue);color:#fff;padding:clamp(56px,8vw,120px) var(--pad)}
+.contact-band h2{font:900 clamp(44px,8vw,128px)/.88 var(--display);font-stretch:140%;letter-spacing:-.03em;margin-bottom:36px}
+.contact-band dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.contact-band dt{color:#B9BFFF;font-size:15px;margin-bottom:2px}
+.contact-band dd{font-size:clamp(19px,1.8vw,24px);font-weight:500}
+.contact-band dd a{text-decoration-thickness:1.5px;text-underline-offset:4px}
+.contact-page{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);margin:clamp(24px,4vw,56px) var(--pad) clamp(56px,8vw,120px)}
+.contact-photo{background:var(--ink);min-height:100%}
+.contact-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.contact{display:flex;flex-direction:column;justify-content:center}
+.contact h1{font:900 clamp(48px,7vw,120px)/.88 var(--display);font-stretch:140%;letter-spacing:-.03em;margin-bottom:24px}
+.contact-intro{font-size:clamp(18px,1.6vw,22px);max-width:34ch;margin-bottom:40px;color:#E3E6FF}
+.contact dl{display:grid;gap:22px}
+.contact dt{color:#B9BFFF;font-size:15px;margin-bottom:2px}
+.contact dd{font-size:clamp(19px,1.8vw,24px);font-weight:500}
+.contact dd a{text-decoration-thickness:1.5px;text-underline-offset:4px}
+footer{display:flex;justify-content:space-between;gap:20px;padding:20px var(--pad);font-size:14px;color:var(--grey)}
+
+/* section pages */
+.section-head{padding:clamp(40px,6vw,88px) var(--pad) 24px;display:grid;gap:20px}
+.section-head h1{font-size:clamp(44px,10vw,170px);font-stretch:150%;margin:0;color:var(--blue);line-height:.85}
+.section-head p{max-width:46ch;color:#3A3C45}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.collage{display:flex;flex-wrap:wrap;gap:var(--cg);--cg:clamp(10px,1.4vw,18px);padding:0 var(--pad) clamp(56px,8vw,120px)}
+.collage .tile{flex:none;width:calc(33.33% - var(--cg));aspect-ratio:4/3;padding:0;border:0;background:#E4E6EC;overflow:hidden;cursor:zoom-in}
+.collage .tile[hidden]{display:none}
+.collage .tile img{width:100%;height:100%;object-fit:cover;transition:opacity .2s}
+.collage .tile:hover img{opacity:.88}
+.project{padding:clamp(16px,2vw,32px) var(--pad) clamp(56px,8vw,120px)}
+.project-top{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:clamp(20px,3vw,48px);align-items:center;margin-bottom:clamp(16px,2vw,28px)}
+.project-video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+.project-info h2{font:900 clamp(34px,3.8vw,62px)/.95 var(--display);font-stretch:115%;letter-spacing:-.03em}
+.project-info .meta{color:var(--grey);font-weight:500;margin:10px 0 16px}
+.project-info p{max-width:46ch}
+.role-light{border-top-color:var(--line)}
+.role-light dt{color:var(--blue)}
+.project .collage{padding:0}
+.project+.project{border-top:2px solid var(--ink);padding-top:clamp(48px,6vw,88px)}
+.fv-tabs{display:flex;flex-wrap:wrap;gap:10px;padding:16px var(--pad) 32px;border-bottom:2px solid var(--ink);margin-bottom:clamp(28px,4vw,48px)}
+.fv-tabs button{font:600 15px var(--body);padding:9px 16px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.fv-tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.fv-collage{padding:0 var(--pad) clamp(56px,8vw,120px)}
+#fp-cases .project:first-child{padding-top:0}
+.case-nav{display:flex;flex-wrap:wrap;gap:6px 22px;padding:0 var(--pad) clamp(28px,4vw,48px)}
+.case-nav button{background:none;border:0;padding:4px 0;font:600 16px var(--body);color:var(--ink);cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-decoration-thickness:2px;text-underline-offset:6px;transition:color .2s,text-decoration-color .2s}
+.case-nav button:hover{color:var(--blue);text-decoration-color:var(--blue)}
+.project{scroll-margin-top:24px}
+.fv-tabs{margin-bottom:24px}
+.cv{padding:clamp(16px,2vw,32px) var(--pad) clamp(56px,8vw,120px)}
+.cv-block{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:16px clamp(24px,4vw,64px);border-top:2px solid var(--ink);padding:clamp(24px,3vw,40px) 0}
+.cv-block>h2{font:800 clamp(22px,2.2vw,30px)/1.05 var(--display);font-stretch:120%;letter-spacing:-.01em;color:var(--blue)}
+.cv-block .skills{margin:0;padding-top:0;border-top:0}
+.cv-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:6px clamp(16px,3vw,40px);padding:0 0 clamp(20px,2.4vw,32px)}
+.cv-row:last-child{padding-bottom:0}
+.cv-row+.cv-row{border-top:1px solid var(--line);padding-top:clamp(20px,2.4vw,32px)}
+.cv-when{color:var(--grey);font-weight:500;font-variant-numeric:tabular-nums}
+.cv-row h3{font:700 clamp(19px,1.6vw,22px)/1.2 var(--display);font-stretch:105%}
+.cv-org{color:var(--grey);margin-top:2px}
+.cv-row ul,.cv-list{margin-top:12px;padding-left:1.1em;max-width:68ch}
+.cv-row li,.cv-list li{margin-bottom:6px}
+.cv-list{margin-top:0}
+.case-launch{border-top:2px solid var(--ink);padding:clamp(40px,5vw,72px) var(--pad) clamp(48px,6vw,96px)}
+.case-launch .tag{display:inline-block;background:var(--pink);color:var(--ink);font-weight:600;font-size:14px;padding:4px 12px;border-radius:999px;margin-bottom:16px}
+.cl-head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px clamp(24px,4vw,64px);align-items:end;margin-bottom:clamp(24px,3vw,40px)}
+.cl-head h2{font:900 clamp(44px,6.5vw,104px)/.9 var(--display);font-stretch:130%;letter-spacing:-.03em}
+.case-launch .meta{color:var(--grey);font-weight:500;margin-bottom:8px}
+.cl-head p:not(.meta){max-width:52ch}
+.cl-head>div:last-child{padding-bottom:.35em}
+.mosaic{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.4vw,18px);align-items:start;padding-bottom:calc(17% + 32px)}
+.mosaic .m-tile:nth-child(3n+2){transform:translateY(18%)}
+.mosaic .m-tile:nth-child(3n){transform:translateY(36%)}
+.case-launch .zoom{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in}
+.case-launch .zoom img{width:100%;height:auto;display:block;aspect-ratio:4/5;object-fit:cover}
+.deliv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);align-items:center;gap:20px clamp(24px,4vw,64px);border-top:2px solid var(--ink);padding:clamp(24px,3vw,40px) 0}
+.deliv-text h3{font:800 clamp(22px,2.2vw,30px)/1.05 var(--display);font-stretch:115%;color:var(--blue);margin-bottom:10px}
+.deliv-text p:not(.meta){max-width:40ch}
+.deliv-text .hint{color:var(--grey);font-size:15px;margin-top:14px}
+.deliv-media.cols-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.4vw,18px)}
+.ig{max-width:520px;margin:0 auto}
+.ig-viewport{position:relative;overflow:hidden;aspect-ratio:4/5;background:#E4E6EC;touch-action:pan-y;user-select:none}
+.ig-track{display:flex;height:100%;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.ig-slide{flex:0 0 100%;height:100%}
+.ig-slide img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.ig-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:var(--ink);font-size:26px;line-height:1;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.15);transition:opacity .2s,background .2s}
+.ig-nav:hover{background:var(--pink)}
+.ig-prev{left:12px}.ig-next{right:12px}
+.ig-nav[disabled]{opacity:0;pointer-events:none}
+.ig-count{position:absolute;top:12px;right:12px;background:rgba(22,23,28,.7);color:#fff;font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px;font-variant-numeric:tabular-nums}
+.ig-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.ig-dot{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
+.ig-dot[aria-current="true"]{background:var(--blue)}
+.filters{display:flex;flex-wrap:wrap;gap:10px;padding:0 var(--pad) 28px}
+.filters button{font:600 15px var(--body);padding:9px 16px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(36px,4vw,64px) clamp(16px,2vw,28px);align-items:start;padding:0 var(--pad) clamp(56px,8vw,120px)}
+.work{grid-column:span 6}
+.work.full{grid-column:1/-1}
+.work.half{grid-column:span 6}
+.work.w7{grid-column:span 7}
+.work.w5{grid-column:span 5}
+.work.w8{grid-column:span 8}
+.work.w4{grid-column:span 4}
+.zoom{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in}
+.zoom img{width:100%;height:auto;background:#E4E6EC}
+.showcase{margin:clamp(16px,2vw,32px) var(--pad) clamp(48px,6vw,96px);background:var(--ink);color:var(--paper);padding:clamp(28px,4vw,56px)}
+.sc-title{font:900 clamp(40px,6vw,96px)/.9 var(--display);font-stretch:140%;letter-spacing:-.03em;margin-bottom:clamp(18px,2vw,28px)}
+.sc-tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:clamp(24px,3vw,40px)}
+.sc-tabs button{font:600 16px var(--body);padding:10px 18px;border-radius:999px;border:1.5px solid #5A5D69;background:transparent;color:#C9CBD3;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.sc-tabs button:hover{border-color:var(--paper);color:var(--paper)}
+.sc-tabs button[aria-selected="true"]{background:var(--pink);border-color:var(--pink);color:var(--ink)}
+.sc-panel[hidden]{display:none}
+.sc-media{display:block;width:100%;padding:0;border:0;background:none}
+button.sc-media{cursor:zoom-in}
+.sc-media img{width:100%;height:auto;display:block}
+.feature-video{aspect-ratio:2200/1080;object-fit:cover;background:#000}
+.sc-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:clamp(24px,4vw,64px);padding-top:clamp(24px,4vw,48px);align-items:center}
+.sc-body h3{font:900 clamp(34px,3.8vw,62px)/.95 var(--display);font-stretch:115%;letter-spacing:-.03em}
+.sc-body .meta{color:#A9ACB8;margin:10px 0 18px}
+.sc-body p{max-width:46ch}
+.sc-top{align-items:start}
+.sc-top .role{margin-top:0}
+.role{margin-top:20px;padding-top:16px;border-top:1px solid #3A3C45;max-width:46ch}
+.role dt{color:var(--pink);font-weight:600;font-size:15px;margin-bottom:4px}
+.sc-body .zoom{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in}
+.sc-body .zoom img{width:100%;height:auto;display:block}
+.sc-body .btn.light{margin-top:24px}
+.btn.light{border-color:var(--paper);color:var(--paper);background:transparent;font:600 16px var(--body);cursor:pointer}
+.btn.light:hover{background:var(--pink);border-color:var(--pink);color:var(--ink)}
+.book-grid{display:grid;grid-template-columns:3fr 2fr;gap:clamp(8px,1vw,14px);align-items:start}
+.book-thumbs{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1vw,14px)}
+.book-open:not(.btn){display:block;padding:0;border:0;background:none;cursor:pointer}
+.book-open img{width:100%;height:auto;display:block;box-shadow:0 0 0 1px var(--line)}
+.book{position:fixed;inset:0;z-index:60;background:rgba(22,23,28,.96);display:none;flex-direction:column;color:var(--paper)}
+.book.open{display:flex}
+.book-bar{display:flex;justify-content:space-between;align-items:center;padding:16px var(--pad);font-weight:600}
+.book .close{background:var(--paper);color:var(--ink);border:0;border-radius:999px;padding:10px 18px;font:600 15px var(--body);cursor:pointer}
+.book-stage{flex:1;display:flex;align-items:center;justify-content:center;gap:12px;padding:0 12px 24px;min-height:0}
+.book-stage img{max-width:calc(100% - 120px);max-height:100%;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.nav-btn{flex:none;width:48px;height:48px;border-radius:50%;border:2px solid var(--paper);background:transparent;color:var(--paper);font-size:28px;line-height:1;cursor:pointer}
+.nav-btn:hover{background:var(--pink);border-color:var(--pink);color:var(--ink)}
+.nav-btn:disabled{opacity:.3;cursor:default;background:transparent;border-color:var(--paper);color:var(--paper)}
+@media (max-width:780px){.book-stage{position:relative;padding:0 0 24px}.book-stage img{max-width:100%}.nav-btn{position:absolute;bottom:32px;background:rgba(22,23,28,.7)}#bookPrev{left:12px}#bookNext{right:12px}}
+.lightbox{position:fixed;inset:0;z-index:50;background:rgba(22,23,28,.94);display:none;align-items:center;justify-content:center;padding:clamp(12px,4vw,48px)}
+.lightbox.open{display:flex}
+.lightbox img{max-width:100%;max-height:100%;object-fit:contain}
+.lightbox .close{position:absolute;top:16px;right:16px;background:var(--paper);color:var(--ink);border:0;border-radius:999px;padding:10px 18px;font:600 15px var(--body);cursor:pointer}
+.work h2{font:700 22px/1.2 var(--display);font-stretch:110%;margin-top:14px}
+.work .meta{color:var(--grey);font-size:15px;margin-top:2px}
+.work p{margin-top:8px;max-width:52ch;font-size:16px}
+.work[hidden]{display:none}
+
+.photos{columns:3 280px;column-gap:clamp(16px,2vw,24px);padding:0 var(--pad)}
+.photos .ph{break-inside:avoid;margin-bottom:clamp(16px,2vw,24px)}
+.sub{font:800 clamp(32px,4vw,52px)/1 var(--display);font-stretch:120%;padding:clamp(48px,6vw,88px) var(--pad) 24px;border-top:2px solid var(--ink);margin-top:clamp(40px,6vw,80px)}
+.videos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(16px,2vw,28px);padding:0 var(--pad) clamp(56px,8vw,120px)}
+.video .ph{aspect-ratio:16/9;position:relative}
+.video .ph::after{content:"";position:absolute;left:50%;top:50%;width:0;height:0;transform:translate(-30%,-50%);
+  border-left:34px solid var(--ink);border-top:21px solid transparent;border-bottom:21px solid transparent}
+.video h2{font:700 22px/1.2 var(--display);font-stretch:110%;margin-top:14px}
+.video .meta{color:var(--grey);font-size:15px}
+
+@media (max-width:780px){
+  .sc-body{grid-template-columns:1fr}
+  .showcase{margin-left:0;margin-right:0;padding:28px 20px}
+  .nav ul{gap:14px;font-size:15px}
+  .nav .logo{font-size:17px}
+  .about,.section-head,.project-top,.cv-block,.contact-page,.cl-head,.deliv{grid-template-columns:1fr}
+  .mosaic{grid-template-columns:repeat(2,1fr);padding-bottom:calc(13% + 24px)}
+  .mosaic .m-tile:nth-child(n){transform:none}
+  .mosaic .m-tile:nth-child(3){order:1}.mosaic .m-tile:nth-child(2){order:2}.mosaic .m-tile:nth-child(1){order:3}.mosaic .m-tile:nth-child(5){order:4}.mosaic .m-tile:nth-child(4){order:5}.mosaic .m-tile:nth-child(6){order:6}
+  .mosaic .m-tile:nth-child(2),.mosaic .m-tile:nth-child(5),.mosaic .m-tile:nth-child(6){transform:translateY(20%)}
+  .contact-photo{aspect-ratio:4/5}
+  .cv-row{grid-template-columns:1fr}
+  .door{grid-template-columns:1fr}
+  .door ul{text-align:left}
+  .door:hover h2,.door:focus-visible h2{font-stretch:115%}
+  .reg{display:none}
+  .overprint{font-size:12.4vw}
+  .nav{flex-direction:column;align-items:flex-start;gap:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main menu">
+  <a class="logo" href="#home">Shanoi Jansen</a>
+  <ul>
+    <li><a href="#design">Design</a></li>
+    <li><a href="#photo-video">Photo &amp; video</a></li>
+    <li><a href="#cv">CV</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HOME -->
+<main id="view-home" class="view">
+  <section class="hero" id="hero">
+    <i class="reg tr" aria-hidden="true"></i><i class="reg bl" aria-hidden="true"></i>
+    <h1 class="overprint" aria-label="Shanoi Jansen">
+      <span class="base" aria-hidden="true"><span>Shanoi</span><span>Jansen</span></span>
+      <span class="layer" aria-hidden="true"><span>Shanoi</span><span>Jansen</span></span>
+    </h1>
+    <div class="hero-foot">
+      <p>Graphic designer, photographer and videographer with over 5 years of experience.</p>
+      <div class="btns">
+        <a class="btn solid" href="#design">View design</a>
+        <a class="btn" href="#photo-video">View photo &amp; video</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="doors" aria-label="Work">
+    <a class="door" href="#design">
+      <h2>Design</h2>
+      <ul><li>Brand identity</li><li>Campaigns &amp; social media</li><li>Web design</li><li>Packaging</li></ul>
+    </a>
+    <a class="door" href="#photo-video">
+      <h2>Photo &amp; video</h2>
+      <ul><li>Photography</li><li>Videography</li></ul>
+    </a>
+  </section>
+
+  <section class="about" id="over">
+    <div class="portrait"><img src="img/shanoi.webp" alt="Portrait of Shanoi Jansen" loading="lazy"></div>
+    <div>
+      <h3>About me</h3>
+      <p>I’m Shanoi, a graphic designer, photographer and videographer. I graduated with a Bachelor of Arts in 2022 and have over 5 years of experience in design and visual content.</p>
+      <p>As a graphic designer I work on brand identities, web design, campaigns and posters, flyers, packaging and social media posts. As a creative all-rounder, I’m looking for new, challenging projects where I can put my creativity to work.</p>
+      <ul class="skills" aria-label="Expertise">
+        <li>Brand identity</li><li>Web design</li><li>Campaigns &amp; posters</li><li>Flyers</li><li>Packaging</li><li>Social media</li><li>Photography</li><li>Videography</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<!-- DESIGN -->
+<main id="view-design" class="view">
+  <header class="section-head">
+    <h1>Design</h1>
+    <p>Brand identities, web design, campaigns, posters, flyers, packaging and social media posts for a range of clients.</p>
+  </header>
+  <section class="case-launch" aria-labelledby="dl-h">
+    <div class="cl-head">
+      <div>
+        <p class="tag">Social branding example</p>
+        <h2 id="dl-h">Drs Leenarts</h2>
+      </div>
+      <div>
+        <p class="meta">Launch campaign, Leave-in Conditioner</p>
+        <p>Social branding for the launch of the new Leave-in Conditioner by Drs Leenarts, the dermatologist haircare brand: paid social ads, a key visual and organic Instagram posts that fit the brand’s feed.</p>
+      </div>
+    </div>
+    <div class="mosaic"><button class="zoom m-tile" data-src="img/leenarts/03.webp" aria-label="Enlarge: Key visual: Van hoofdhuid tot haarpunten"><img src="img/leenarts/03.webp" alt="Drs Leenarts, Key visual: Van hoofdhuid tot haarpunten" loading="lazy"></button><button class="zoom m-tile" data-src="img/leenarts/01.webp" aria-label="Enlarge: Ad: Kan jouw leave-in conditioner dit?"><img src="img/leenarts/01.webp" alt="Drs Leenarts, Ad: Kan jouw leave-in conditioner dit?" loading="lazy"></button><button class="zoom m-tile" data-src="img/leenarts/07.webp" aria-label="Enlarge: Routine visual with 10% discount"><img src="img/leenarts/07.webp" alt="Drs Leenarts, Routine visual with 10% discount" loading="lazy"></button><button class="zoom m-tile" data-src="img/leenarts/02.webp" aria-label="Enlarge: Customer review visual"><img src="img/leenarts/02.webp" alt="Drs Leenarts, Customer review visual" loading="lazy"></button><button class="zoom m-tile" data-src="img/leenarts/08.webp" aria-label="Enlarge: Launch post: NIEUW"><img src="img/leenarts/08.webp" alt="Drs Leenarts, Launch post: NIEUW" loading="lazy"></button><button class="zoom m-tile" data-src="img/leenarts/10.webp" aria-label="Enlarge: Ad: Zeg dag tegen droog, pluizig haar"><img src="img/leenarts/10.webp" alt="Drs Leenarts, Ad: Zeg dag tegen droog, pluizig haar" loading="lazy"></button></div>
+
+    <div class="deliv">
+      <div class="deliv-text"><h3>Paid social ads</h3><p class="meta">Meta, 4:5, goal: conversion</p><p>Two ad options designed to drive sales of the new Leave-in Conditioner.</p></div>
+      <div class="deliv-media cols-2"><button class="zoom" data-src="img/leenarts/01.webp" aria-label="Enlarge: Ad: Kan jouw leave-in conditioner dit?"><img src="img/leenarts/01.webp" alt="Drs Leenarts, Ad: Kan jouw leave-in conditioner dit?" loading="lazy"></button><button class="zoom" data-src="img/leenarts/10.webp" aria-label="Enlarge: Ad: Zeg dag tegen droog, pluizig haar"><img src="img/leenarts/10.webp" alt="Drs Leenarts, Ad: Zeg dag tegen droog, pluizig haar" loading="lazy"></button></div>
+    </div>
+    <div class="deliv">
+      <div class="deliv-text"><h3>Key visual &amp; Instagram carousel</h3><p class="meta">Key visual, swipe post</p><p>The key visual for the launch, which also opens an Instagram carousel that walks through the full routine: scalp serum, leave-in conditioner and hair oil.</p><p class="hint">Swipe or use the arrows to browse.</p></div>
+      <div class="deliv-media"><div class="ig" aria-roledescription="carousel" aria-label="Key visual carousel">
+          <div class="ig-viewport"><div class="ig-track"><div class="ig-slide" role="group" aria-roledescription="slide" aria-label="1 of 4"><img src="img/leenarts/03.webp" alt="Drs Leenarts, Key visual: Van hoofdhuid tot haarpunten" loading="lazy" draggable="false"></div><div class="ig-slide" role="group" aria-roledescription="slide" aria-label="2 of 4"><img src="img/leenarts/04.webp" alt="Drs Leenarts, Scalp Care Serum: Rust voor je hoofdhuid" loading="lazy" draggable="false"></div><div class="ig-slide" role="group" aria-roledescription="slide" aria-label="3 of 4"><img src="img/leenarts/05.webp" alt="Drs Leenarts, Leave-in Conditioner: Verzorging die blijft" loading="lazy" draggable="false"></div><div class="ig-slide" role="group" aria-roledescription="slide" aria-label="4 of 4"><img src="img/leenarts/06.webp" alt="Drs Leenarts, Hair Oil: Glans tot in de punten" loading="lazy" draggable="false"></div></div>
+            <button class="ig-nav ig-prev" aria-label="Previous slide">‹</button>
+            <button class="ig-nav ig-next" aria-label="Next slide">›</button>
+            <span class="ig-count">1/4</span>
+          </div>
+          <div class="ig-dots"><button class="ig-dot" aria-label="Go to slide 1"></button><button class="ig-dot" aria-label="Go to slide 2"></button><button class="ig-dot" aria-label="Go to slide 3"></button><button class="ig-dot" aria-label="Go to slide 4"></button></div>
+        </div></div>
+    </div>
+    <div class="deliv">
+      <div class="deliv-text"><h3>Organic launch post</h3><p class="meta">Instagram, swipe post</p><p>An Instagram carousel announcing the launch, designed to fit the existing feed.</p><p class="hint">Swipe or use the arrows to browse.</p></div>
+      <div class="deliv-media"><div class="ig" aria-roledescription="carousel" aria-label="Launch post carousel">
+          <div class="ig-viewport"><div class="ig-track"><div class="ig-slide" role="group" aria-roledescription="slide" aria-label="1 of 2"><img src="img/leenarts/08.webp" alt="Drs Leenarts, Launch post: NIEUW" loading="lazy" draggable="false"></div><div class="ig-slide" role="group" aria-roledescription="slide" aria-label="2 of 2"><img src="img/leenarts/09.webp" alt="Drs Leenarts, Launch post: Eindelijk, het ontbrekende stukje" loading="lazy" draggable="false"></div></div>
+            <button class="ig-nav ig-prev" aria-label="Previous slide">‹</button>
+            <button class="ig-nav ig-next" aria-label="Next slide">›</button>
+            <span class="ig-count">1/2</span>
+          </div>
+          <div class="ig-dots"><button class="ig-dot" aria-label="Go to slide 1"></button><button class="ig-dot" aria-label="Go to slide 2"></button></div>
+        </div></div>
+    </div>
+  </section>
+
+  <section class="showcase" aria-labelledby="sc-h">
+    <h2 id="sc-h" class="sc-title">Featured</h2>
+    <div class="sc-tabs" role="tablist" aria-label="Featured clients">
+      <button role="tab" id="t-kw" aria-controls="p-kw" aria-selected="true">Kwekkeboom</button>
+      <button role="tab" id="t-ams" aria-controls="p-ams" aria-selected="false" tabindex="-1">Gemeente Amstelveen</button>
+      <button role="tab" id="t-puur" aria-controls="p-puur" aria-selected="false" tabindex="-1">PUUR</button>
+    </div>
+
+    <div class="sc-panel" role="tabpanel" id="p-kw" aria-labelledby="t-kw">
+      <video class="sc-media feature-video" src="video/kwekkeboom.mp4" poster="video/kwekkeboom-poster.webp" muted loop playsinline autoplay aria-label="Social content mashup for Kwekkeboom"></video>
+      <div class="sc-body">
+        <div>
+          <h3>Kwekkeboom</h3>
+          <p class="meta">Social media branding &amp; management</p>
+          <p>For Kwekkeboom Oven &amp; Airfryer, I translated the brand identity into social media content and managed the channels.</p>
+          <dl class="role"><dt>My role</dt><dd>Graphic design for social media, social media management and copywriting.</dd></dl>
+        </div>
+        <button class="zoom" data-src="img/design/kwekkeboom.webp" aria-label="Enlarge Kwekkeboom feed"><img src="img/design/kwekkeboom.webp" alt="Kwekkeboom: Instagram profile and three social posts" loading="lazy"></button>
+      </div>
+    </div>
+
+    <div class="sc-panel" role="tabpanel" id="p-ams" aria-labelledby="t-ams" hidden>
+      <button class="zoom sc-media" data-src="img/design/amstelveen-billboard.webp" aria-label="Enlarge billboard Gemeente Amstelveen"><img src="img/design/amstelveen-billboard.webp" alt="Gemeente Amstelveen: billboard ‘We hebben ruimte voor jou!’" loading="lazy"></button>
+      <div class="sc-body">
+        <div>
+          <h3>Gemeente Amstelveen</h3>
+          <p class="meta">Recruitment campaign</p>
+          <p>Recruitment campaign ‘We hebben ruimte voor jou!’ (‘We have room for you!’) for werkenvooramstelveen.nl, running on billboards, posters, online and on the website.</p>
+          <dl class="role"><dt>My role</dt><dd>Graphic design for the campaign, plus photography and design for the website, posters and online ads.</dd></dl>
+        </div>
+        <button class="zoom" data-src="img/design/amstelveen-website.webp" aria-label="Enlarge website Gemeente Amstelveen"><img src="img/design/amstelveen-website.webp" alt="Gemeente Amstelveen: job page on laptop, tablet, phone and bus shelter" loading="lazy"></button>
+      </div>
+    </div>
+
+    <div class="sc-panel" role="tabpanel" id="p-puur" aria-labelledby="t-puur" hidden>
+      <div class="sc-media book-grid">
+        <button class="book-open cover" data-page="1" aria-label="Open brand book PUUR"><img src="img/puur/01.webp" alt="PUUR brand book, cover" loading="lazy"></button>
+        <div class="book-thumbs"><button class="book-open" data-page="4" aria-label="Open brand book at page 4"><img src="img/puur/04.webp" alt="" loading="lazy"></button><button class="book-open" data-page="9" aria-label="Open brand book at page 9"><img src="img/puur/09.webp" alt="" loading="lazy"></button><button class="book-open" data-page="15" aria-label="Open brand book at page 15"><img src="img/puur/15.webp" alt="" loading="lazy"></button><button class="book-open" data-page="17" aria-label="Open brand book at page 17"><img src="img/puur/17.webp" alt="" loading="lazy"></button><button class="book-open" data-page="20" aria-label="Open brand book at page 20"><img src="img/puur/20.webp" alt="" loading="lazy"></button><button class="book-open" data-page="23" aria-label="Open brand book at page 23"><img src="img/puur/23.webp" alt="" loading="lazy"></button></div>
+      </div>
+      <div class="sc-body sc-top">
+        <div>
+          <h3>PUUR Facility Partners</h3>
+          <p class="meta">Brand identity &amp; brand book</p>
+          <p>Brand identity development for PUUR Facility Partners: logo, colour palette, typography, graphic elements, photography and applications.</p>
+        </div>
+        <div>
+          <dl class="role"><dt>My role</dt><dd>Developed the complete brand identity from scratch and documented it in a brand book, plus branding for business cards and vehicle graphics.</dd></dl>
+          <button class="btn light book-open" data-page="1">View the brand book (24 pages)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="sub">More work</h2>
+  <div class="filters" role="group" aria-label="Filter by category">
+    <button aria-pressed="true" data-f="alle">All</button>
+    <button aria-pressed="false" data-f="campagne">Campaigns &amp; social posts</button>
+    <button aria-pressed="false" data-f="verpakking">Packaging</button>
+  </div>
+  <div class="collage" id="designGrid">
+    <button class="zoom tile" data-ar="1.333" data-cat="campagne" data-src="img/design/cocomora.webp" aria-label="Enlarge: Cocomora perfume poster in the metro"><img src="img/design/cocomora.webp" alt="Cocomora perfume poster in the metro" loading="lazy"></button>
+    <button class="zoom tile" data-ar="0.800" data-cat="verpakking" data-src="img/design/aurelia-dore.webp" aria-label="Enlarge: Aurelia Dore bottle design"><img src="img/design/aurelia-dore.webp" alt="Aurelia Dore bottle design" loading="lazy"></button>
+    <button class="zoom tile" data-ar="1.364" data-cat="campagne" data-src="img/design/seo2.webp" aria-label="Enlarge: SEO2 social posts"><img src="img/design/seo2.webp" alt="SEO2 social posts" loading="lazy"></button>
+    <button class="zoom tile" data-ar="1.500" data-cat="campagne" data-src="img/design/jyizs.webp" aria-label="Enlarge: Jyizs smoothie poster"><img src="img/design/jyizs.webp" alt="Jyizs smoothie poster" loading="lazy"></button>
+    <button class="zoom tile" data-ar="0.800" data-cat="verpakking" data-src="img/design/bodabeans.webp" aria-label="Enlarge: Bodabeans coffee packaging"><img src="img/design/bodabeans.webp" alt="Bodabeans coffee packaging" loading="lazy"></button>
+    <button class="zoom tile" data-ar="2.000" data-cat="campagne" data-src="img/design/the-original.webp" aria-label="Enlarge: The Original truck design"><img src="img/design/the-original.webp" alt="The Original truck design" loading="lazy"></button>
+    <button class="zoom tile" data-ar="0.800" data-cat="verpakking" data-src="img/design/frezh.webp" aria-label="Enlarge: Frezh can design"><img src="img/design/frezh.webp" alt="Frezh can design" loading="lazy"></button>
+    <button class="zoom tile" data-ar="0.800" data-cat="campagne" data-src="img/design/running-sport.webp" aria-label="Enlarge: Running Sport poster"><img src="img/design/running-sport.webp" alt="Running Sport poster" loading="lazy"></button>
+    <button class="zoom tile" data-ar="1.500" data-cat="campagne" data-src="img/design/vandestreek.webp" aria-label="Enlarge: Vandestreek Instagram post"><img src="img/design/vandestreek.webp" alt="Vandestreek Instagram post" loading="lazy"></button>
+    <button class="zoom tile" data-ar="0.800" data-cat="verpakking" data-src="img/design/fola.webp" aria-label="Enlarge: Fola tube packaging"><img src="img/design/fola.webp" alt="Fola tube packaging" loading="lazy"></button>
+    <button class="zoom tile" data-ar="0.800" data-cat="verpakking" data-src="img/design/frezh-2.webp" aria-label="Enlarge: Frezh can in an ice bucket"><img src="img/design/frezh-2.webp" alt="Frezh can in an ice bucket" loading="lazy"></button>
+    <button class="zoom tile" data-ar="1.500" data-cat="campagne" data-src="img/design/green-pure-cleanser.webp" aria-label="Enlarge: Green Pure Cleanser billboard"><img src="img/design/green-pure-cleanser.webp" alt="Green Pure Cleanser billboard" loading="lazy"></button>
+    <button class="zoom tile" data-ar="1.400" data-cat="campagne" data-src="img/design/van-rietschoten.webp" aria-label="Enlarge: Van Rietschoten social posts"><img src="img/design/van-rietschoten.webp" alt="Van Rietschoten social posts" loading="lazy"></button>
+    <button class="zoom tile" data-ar="1.500" data-cat="campagne" data-src="img/design/start-moving.webp" aria-label="Enlarge: Start Moving billboard"><img src="img/design/start-moving.webp" alt="Start Moving billboard" loading="lazy"></button>
+    <button class="zoom tile" data-ar="0.899" data-cat="verpakking" data-src="img/design/ollie.webp" aria-label="Enlarge: Ollie protein pancakes packaging"><img src="img/design/ollie.webp" alt="Ollie protein pancakes packaging" loading="lazy"></button>
+    <button class="zoom tile" data-ar="1.779" data-cat="campagne" data-src="img/design/only-limit.webp" aria-label="Enlarge: ‘You are your only limit’ billboard"><img src="img/design/only-limit.webp" alt="‘You are your only limit’ billboard" loading="lazy"></button>
+  </div>
+</main>
+
+<!-- FOTO & VIDEO -->
+<main id="view-photo-video" class="view">
+  <header class="section-head">
+    <h1 style="font-stretch:105%">Photo &amp; video</h1>
+    <p>Photography and videography for brands and companies, from script and direction to the final edit.</p>
+  </header>
+
+  <div class="fv-tabs" role="tablist" aria-label="Photo and video">
+    <button role="tab" id="ft-cases" aria-controls="fp-cases" aria-selected="true">Video cases</button>
+    <button role="tab" id="ft-biz" aria-controls="fp-biz" aria-selected="false" tabindex="-1">Corporate photography</button>
+    <button role="tab" id="ft-event" aria-controls="fp-event" aria-selected="false" tabindex="-1">Event photography</button>
+  </div>
+  <div role="tabpanel" id="fp-cases" aria-labelledby="ft-cases">
+    <nav class="case-nav" aria-label="Projects">
+      <button data-jump="co-h">Co van der Horst</button>
+      <button data-jump="amsv-h">Gemeente Amstelveen</button>
+      <button data-jump="isa-h">International School of Amsterdam</button>
+      <button data-jump="mr-h">Moulin Rouge Amsterdam</button>
+      <button data-jump="ff-h">Flexform</button>
+    </nav>
+  <section class="project" aria-labelledby="co-h">
+    <div class="project-top">
+      <video class="project-video" src="video/co-van-der-horst.mp4" poster="video/co-van-der-horst-poster.webp" controls playsinline preload="metadata" aria-label="Video Co Contract for Co van der Horst"></video>
+      <div class="project-info">
+        <h2 id="co-h">Co van der Horst</h2>
+        <p class="meta">Co Contract, B2A &amp; B2B Division</p>
+        <p>Corporate video and photo series for the B2A and B2B division of Co van der Horst.</p>
+        <dl class="role role-light"><dt>My role</dt><dd>Concept, script, shot list, direction, production, video editing and photography.</dd></dl>
+      </div>
+    </div>
+    <div class="collage">
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/02.webp" aria-label="Enlarge: Client meeting at the materials table"><img src="img/co/02.webp" alt="Co van der Horst: client meeting at the materials table" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/01.webp" aria-label="Enlarge: Hands with material samples"><img src="img/co/01.webp" alt="Co van der Horst: hands with material samples" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/03.webp" aria-label="Enlarge: Carpet and stone samples"><img src="img/co/03.webp" alt="Co van der Horst: carpet and stone samples" loading="lazy"></button>
+      <button class="zoom tile" data-ar="0.667" data-src="img/co/07.webp" aria-label="Enlarge: Moodboard and floor plan on the table"><img src="img/co/07.webp" alt="Co van der Horst: moodboard and floor plan on the table" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/04.webp" aria-label="Enlarge: Designer laying out fabrics"><img src="img/co/04.webp" alt="Co van der Horst: designer laying out fabrics" loading="lazy"></button>
+      <button class="zoom tile" data-ar="0.667" data-src="img/co/08.webp" aria-label="Enlarge: Planning with sticky notes on glass"><img src="img/co/08.webp" alt="Co van der Horst: planning with sticky notes on glass" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/05.webp" aria-label="Enlarge: Conversation on the sofa"><img src="img/co/05.webp" alt="Co van der Horst: conversation on the sofa" loading="lazy"></button>
+      <button class="zoom tile" data-ar="0.667" data-src="img/co/09.webp" aria-label="Enlarge: Portrait in the showroom"><img src="img/co/09.webp" alt="Co van der Horst: portrait in the showroom" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/06.webp" aria-label="Enlarge: Designers discussing a moodboard"><img src="img/co/06.webp" alt="Co van der Horst: designers discussing a moodboard" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/10.webp" aria-label="Enlarge: Team photo on the stairs"><img src="img/co/10.webp" alt="Co van der Horst: team photo on the stairs" loading="lazy"></button>
+    </div>
+  </section>
+  <section class="project" aria-labelledby="amsv-h">
+    <div class="project-top">
+      <video class="project-video" src="video/amstelveen.mp4" poster="video/amstelveen-poster.webp" controls playsinline preload="metadata" aria-label="Recruitment video Kom werken voor Amstelveen"></video>
+      <div class="project-info">
+        <h2 id="amsv-h">Gemeente Amstelveen</h2>
+        <p class="meta">Recruitment campaign ‘Kom werken voor Amstelveen’</p>
+        <p>Video and photography for the recruitment campaign of the Municipality of Amstelveen.</p>
+        <dl class="role role-light"><dt>My role</dt><dd>Concept, script, shot list, production, direction, video editing and photography.</dd></dl>
+      </div>
+    </div>
+    <div class="collage">
+      <button class="zoom tile" data-ar="1.500" data-src="img/ams/01.webp" aria-label="Enlarge: Employee writing on a glass wall"><img src="img/ams/01.webp" alt="Gemeente Amstelveen: employee writing on a glass wall" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/ams/02.webp" aria-label="Enlarge: Employee in conversation at a table"><img src="img/ams/02.webp" alt="Gemeente Amstelveen: employee in conversation at a table" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/ams/03.webp" aria-label="Enlarge: Portrait of an employee"><img src="img/ams/03.webp" alt="Gemeente Amstelveen: portrait of an employee" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/ams/04.webp" aria-label="Enlarge: Team session at a flip chart"><img src="img/ams/04.webp" alt="Gemeente Amstelveen: team session at a flip chart" loading="lazy"></button>
+    </div>
+  </section>
+  <section class="project" aria-labelledby="isa-h">
+    <div class="project-top">
+      <video class="project-video" src="video/isa.mp4" poster="video/isa-poster.webp" controls playsinline preload="metadata" aria-label="Promotional video International School of Amsterdam"></video>
+      <div class="project-info">
+        <h2 id="isa-h">International School of Amsterdam</h2>
+        <p class="meta">Promotional video &amp; photography</p>
+        <p>Promotional video and photography for the International School of Amsterdam (ISA).</p>
+        <dl class="role role-light"><dt>My role</dt><dd>Concept, script, shot list, production, direction, video editing and photography.</dd></dl>
+      </div>
+    </div>
+    <div class="collage">
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/01.webp" aria-label="Enlarge: Children dressed up as professions"><img src="img/isa/01.webp" alt="International School of Amsterdam: children dressed up as professions" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/02.webp" aria-label="Enlarge: Student on stage in the auditorium"><img src="img/isa/02.webp" alt="International School of Amsterdam: student on stage in the auditorium" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/03.webp" aria-label="Enlarge: Toddlers hand in hand in the playground"><img src="img/isa/03.webp" alt="International School of Amsterdam: toddlers hand in hand in the playground" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/04.webp" aria-label="Enlarge: Student during a chemistry experiment"><img src="img/isa/04.webp" alt="International School of Amsterdam: student during a chemistry experiment" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/05.webp" aria-label="Enlarge: Students with basketballs in the gym"><img src="img/isa/05.webp" alt="International School of Amsterdam: students with basketballs in the gym" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/06.webp" aria-label="Enlarge: Children playing outside on go-karts"><img src="img/isa/06.webp" alt="International School of Amsterdam: children playing outside on go-karts" loading="lazy"></button>
+    </div>
+  </section>
+  <section class="project" aria-labelledby="mr-h">
+    <div class="project-top">
+      <video class="project-video" src="video/moulin-rouge.mp4" poster="video/moulin-rouge-poster.webp" controls playsinline preload="metadata" aria-label="Promotional video Moulin Rouge Amsterdam"></video>
+      <div class="project-info">
+        <h2 id="mr-h">Moulin Rouge Amsterdam</h2>
+        <p class="meta">Promotional video</p>
+        <p>Promotional video for Moulin Rouge Amsterdam.</p>
+        <dl class="role role-light"><dt>My role</dt><dd>Concept, script, shot list, direction, production and video editing.</dd></dl>
+      </div>
+    </div>
+  </section>
+  <section class="project" aria-labelledby="ff-h">
+    <div class="project-top">
+      <video class="project-video" src="video/flexform.mp4" poster="video/flexform-poster.webp" controls playsinline preload="metadata" aria-label="Aftermovie Flexform Amsterdam x Harper's Bazaar NL"></video>
+      <div class="project-info">
+        <h2 id="ff-h">Flexform Amsterdam x Harper’s Bazaar NL</h2>
+        <p class="meta">Aftermovie</p>
+        <p>Aftermovie of the Flexform Amsterdam x Harper’s Bazaar NL event.</p>
+        <dl class="role role-light"><dt>My role</dt><dd>Videographer and video editor.</dd></dl>
+      </div>
+    </div>
+  </section>
+  </div>
+  <div role="tabpanel" id="fp-biz" aria-labelledby="ft-biz" hidden>
+    <div class="collage fv-collage">
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/02.webp" aria-label="Enlarge: Client meeting at the materials table"><img src="img/co/02.webp" alt="Co van der Horst: client meeting at the materials table" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/01.webp" aria-label="Enlarge: Hands with material samples"><img src="img/co/01.webp" alt="Co van der Horst: hands with material samples" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/03.webp" aria-label="Enlarge: Carpet and stone samples"><img src="img/co/03.webp" alt="Co van der Horst: carpet and stone samples" loading="lazy"></button>
+      <button class="zoom tile" data-ar="0.667" data-src="img/co/07.webp" aria-label="Enlarge: Moodboard and floor plan on the table"><img src="img/co/07.webp" alt="Co van der Horst: moodboard and floor plan on the table" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/04.webp" aria-label="Enlarge: Designer laying out fabrics"><img src="img/co/04.webp" alt="Co van der Horst: designer laying out fabrics" loading="lazy"></button>
+      <button class="zoom tile" data-ar="0.667" data-src="img/co/08.webp" aria-label="Enlarge: Planning with sticky notes on glass"><img src="img/co/08.webp" alt="Co van der Horst: planning with sticky notes on glass" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/05.webp" aria-label="Enlarge: Conversation on the sofa"><img src="img/co/05.webp" alt="Co van der Horst: conversation on the sofa" loading="lazy"></button>
+      <button class="zoom tile" data-ar="0.667" data-src="img/co/09.webp" aria-label="Enlarge: Portrait in the showroom"><img src="img/co/09.webp" alt="Co van der Horst: portrait in the showroom" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/06.webp" aria-label="Enlarge: Designers discussing a moodboard"><img src="img/co/06.webp" alt="Co van der Horst: designers discussing a moodboard" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/co/10.webp" aria-label="Enlarge: Team photo on the stairs"><img src="img/co/10.webp" alt="Co van der Horst: team photo on the stairs" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/ams/01.webp" aria-label="Enlarge: Employee writing on a glass wall"><img src="img/ams/01.webp" alt="Gemeente Amstelveen: employee writing on a glass wall" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/ams/02.webp" aria-label="Enlarge: Employee in conversation at a table"><img src="img/ams/02.webp" alt="Gemeente Amstelveen: employee in conversation at a table" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/ams/03.webp" aria-label="Enlarge: Portrait of an employee"><img src="img/ams/03.webp" alt="Gemeente Amstelveen: portrait of an employee" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/ams/04.webp" aria-label="Enlarge: Team session at a flip chart"><img src="img/ams/04.webp" alt="Gemeente Amstelveen: team session at a flip chart" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/01.webp" aria-label="Enlarge: Children dressed up as professions"><img src="img/isa/01.webp" alt="International School of Amsterdam: children dressed up as professions" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/02.webp" aria-label="Enlarge: Student on stage in the auditorium"><img src="img/isa/02.webp" alt="International School of Amsterdam: student on stage in the auditorium" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/03.webp" aria-label="Enlarge: Toddlers hand in hand in the playground"><img src="img/isa/03.webp" alt="International School of Amsterdam: toddlers hand in hand in the playground" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/04.webp" aria-label="Enlarge: Student during a chemistry experiment"><img src="img/isa/04.webp" alt="International School of Amsterdam: student during a chemistry experiment" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/05.webp" aria-label="Enlarge: Students with basketballs in the gym"><img src="img/isa/05.webp" alt="International School of Amsterdam: students with basketballs in the gym" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/isa/06.webp" aria-label="Enlarge: Children playing outside on go-karts"><img src="img/isa/06.webp" alt="International School of Amsterdam: children playing outside on go-karts" loading="lazy"></button>
+    </div>
+  </div>
+  <div role="tabpanel" id="fp-event" aria-labelledby="ft-event" hidden>
+    <div class="collage fv-collage">
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/01.webp" aria-label="Enlarge: Champagne in an ice bucket at the bar"><img src="img/event/01.webp" alt="Event photography: champagne in an ice bucket at the bar" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/02.webp" aria-label="Enlarge: Champagne bottles on the bar"><img src="img/event/02.webp" alt="Event photography: champagne bottles on the bar" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/03.webp" aria-label="Enlarge: Wine tasting at the bar"><img src="img/event/03.webp" alt="Event photography: wine tasting at the bar" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/04.webp" aria-label="Enlarge: Wine being poured"><img src="img/event/04.webp" alt="Event photography: wine being poured" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/05.webp" aria-label="Enlarge: Laughing guest at a table"><img src="img/event/05.webp" alt="Event photography: laughing guest at a table" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/06.webp" aria-label="Enlarge: Couple toasting with wine"><img src="img/event/06.webp" alt="Event photography: couple toasting with wine" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/07.webp" aria-label="Enlarge: Guest with glitter in the mirror"><img src="img/event/07.webp" alt="Event photography: guest with glitter in the mirror" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/08.webp" aria-label="Enlarge: Couple with burger and fries"><img src="img/event/08.webp" alt="Event photography: couple with burger and fries" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/09.webp" aria-label="Enlarge: Dancing guest with a hat"><img src="img/event/09.webp" alt="Event photography: dancing guest with a hat" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/10.webp" aria-label="Enlarge: Dancing guest with sunglasses"><img src="img/event/10.webp" alt="Event photography: dancing guest with sunglasses" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/11.webp" aria-label="Enlarge: Guest waving with a spritz"><img src="img/event/11.webp" alt="Event photography: guest waving with a spritz" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/12.webp" aria-label="Enlarge: Friends at the photo booth"><img src="img/event/12.webp" alt="Event photography: friends at the photo booth" loading="lazy"></button>
+      <button class="zoom tile" data-ar="0.667" data-src="img/event/13.webp" aria-label="Enlarge: Couple toasting on the rooftop"><img src="img/event/13.webp" alt="Event photography: couple toasting on the rooftop" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/14.webp" aria-label="Enlarge: Guests chatting over cocktails"><img src="img/event/14.webp" alt="Event photography: guests chatting over cocktails" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/15.webp" aria-label="Enlarge: Guests toasting on the rooftop"><img src="img/event/15.webp" alt="Event photography: guests toasting on the rooftop" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/16.webp" aria-label="Enlarge: Group photo on the rooftop"><img src="img/event/16.webp" alt="Event photography: group photo on the rooftop" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/17.webp" aria-label="Enlarge: Bites on a serving tray"><img src="img/event/17.webp" alt="Event photography: bites on a serving tray" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/18.webp" aria-label="Enlarge: Guests on the sofa with cocktails"><img src="img/event/18.webp" alt="Event photography: guests on the sofa with cocktails" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.500" data-src="img/event/19.webp" aria-label="Enlarge: Guest with a cocktail on the sofa"><img src="img/event/19.webp" alt="Event photography: guest with a cocktail on the sofa" loading="lazy"></button>
+      <button class="zoom tile" data-ar="1.777" data-src="img/event/20.webp" aria-label="Enlarge: Smoking cocktail at the bar"><img src="img/event/20.webp" alt="Event photography: smoking cocktail at the bar" loading="lazy"></button>
+    </div>
+  </div>
+</main>
+
+<!-- CV -->
+<main id="view-cv" class="view">
+  <header class="section-head">
+    <h1>CV</h1>
+    <p>Creative content specialist with a Bachelor of Arts and hands-on experience in graphic design, social media management, videography, photography and video editing. Experienced in taking ideas from concept to final product, from directing on set to editing and delivery. Strong in client contact and teamwork, with a background in customer service, sales and hospitality.</p>
+  </header>
+  <div class="cv">
+    <section class="cv-block" aria-labelledby="cv-exp"><h2 id="cv-exp">Experience</h2><div>
+      <article class="cv-row"><p class="cv-when">2022 – present</p><div><h3>Graphic Designer &amp; Photographer/Videographer</h3><p class="cv-org">Visuals by Noi (freelance)</p><ul><li>Develop visual identities from scratch, including logo, colour palette, typography and complete brand books, and apply them to business cards and vehicle graphics</li><li>Design campaigns across print and digital: billboards, posters, flyers and online ads</li><li>Design websites and landing pages that carry campaigns and brand identities onto every screen</li><li>Design packaging for food, beverage and personal care brands</li><li>Translate brand identities into social media content; manage social channels and write copy</li><li>Produce corporate, promotional and recruitment videos end-to-end: concept, script, shot list, production, direction and editing</li><li>Shoot corporate, editorial and event photography</li><li>Developed a signature cinematic, vintage photography style for weddings, elopements and portrait sessions, built around my own Instagram channel @visualsbynoi</li></ul></div></article>
+      <article class="cv-row"><p class="cv-when">Jan – Jul 2026</p><div><h3>E-commerce Designer &amp; Manager</h3><p class="cv-org">E-commerce fashion store</p><ul><li>Designed a Shopify fashion webshop and handled sales and customer service, from first visit to after-sales support</li><li>Created short-form social media content, ran paid advertising campaigns via Meta Ads and ran email marketing campaigns</li></ul></div></article>
+      <article class="cv-row"><p class="cv-when">2022 – 2024</p><div><h3>Content Specialist</h3><p class="cv-org">FocusOn</p><ul><li>Developed creative concepts and directed shoots on set to bring them to life</li><li>Shot and edited video and photo content, and created graphic designs</li><li>Managed social media platforms for clients</li><li>Mentored and supervised interns</li></ul></div></article>
+      <article class="cv-row"><p class="cv-when">2021 – 2022</p><div><h3>Video Production (internship)</h3><p class="cv-org">Clipjesfabriek</p><ul><li>Filmed and edited videos from start to finish, shot and edited photography, and created short-form social media content for clients</li></ul></div></article>
+      <article class="cv-row"><p class="cv-when">2020 – 2021</p><div><h3>Social Media (internship)</h3><p class="cv-org">RTL</p><ul><li>Created and supported social media content for a national broadcaster</li></ul></div></article>
+      <article class="cv-row"><p class="cv-when">2021, 2022 &amp; 2025</p><div><h3>Customer Service</h3><p class="cv-org">GGD</p></div></article>
+      <article class="cv-row"><p class="cv-when">2018 – 2022</p><div><h3>Sales, Customer Service &amp; Graphic Design</h3><p class="cv-org">MediPaw B.V.</p><ul><li>Represented the company as a freelance sales rep at trade shows in England, pitching products and generating leads</li><li>Handled customer service by phone and email</li><li>Designed all printed materials for the stand, from posters to large-format displays</li></ul></div></article>
+      <article class="cv-row"><p class="cv-when">2016 – 2021</p><div><h3>Retail &amp; Hospitality</h3><p class="cv-org">Costes, WE Fashion, Open 32, Optisport, Van der Valk Hotel and Café Dik Voor Elkaar</p></div></article>
+    </div></section>
+    <section class="cv-block" aria-labelledby="cv-edu"><h2 id="cv-edu">Education</h2><div>
+      <article class="cv-row"><p class="cv-when">2019 – 2022</p><div><h3>Bachelor of Arts, International Media &amp; Entertainment Management</h3><p class="cv-org">Breda University of Applied Sciences</p></div></article>
+      <article class="cv-row"><p class="cv-when">2014 – 2018</p><div><h3>Bilingual secondary education</h3><p class="cv-org">HAVO TTO</p></div></article>
+    </div></section>
+    <section class="cv-block" aria-labelledby="cv-skills"><h2 id="cv-skills">Skills</h2><div>
+      <ul class="skills"><li>Graphic design &amp; branding</li><li>Social media content</li><li>Short-form video &amp; social media strategy</li><li>Videography &amp; photography</li><li>Video editing</li><li>On-camera presenting</li><li>Customer service</li><li>Sales &amp; lead generation</li></ul>
+    </div></section>
+    <section class="cv-block" aria-labelledby="cv-tools"><h2 id="cv-tools">Tools</h2><div>
+      <ul class="skills"><li>Adobe Creative Cloud</li><li>Figma</li><li>Shopify &amp; Klaviyo</li><li>Meta Ads</li></ul>
+    </div></section>
+    <section class="cv-block" aria-labelledby="cv-more"><h2 id="cv-more">Languages &amp; certificates</h2><div>
+      <ul class="cv-list"><li>Dutch and English (Cambridge Advanced English)</li><li>City Trainer: organising and leading sports activities and events</li><li>Bachelor of Arts</li></ul>
+    </div></section>
+  </div>
+</main>
+
+
+<!-- CONTACT -->
+<main id="view-contact" class="view">
+  <section class="contact-page" aria-labelledby="contact-h">
+    <div class="contact-photo"><img src="img/shanoi-contact.webp" alt="Portrait of Shanoi Jansen on a vintage phone"></div>
+    <div class="contact">
+      <h1 id="contact-h">Let’s talk.</h1>
+      <p class="contact-intro">Have a project in mind, or want to work together? I’d love to hear from you.</p>
+      <dl>
+        <div><dt>Email</dt><dd><a href="mailto:shanoi.jansen@gmail.com">shanoi.jansen@gmail.com</a></dd></div>
+        <div><dt>Phone</dt><dd><a href="tel:+31636495865">06 36 49 58 65</a></dd></div>
+        <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/visualsbynoi/">@visualsbynoi</a></dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<section class="contact-band" id="contact-band" aria-labelledby="band-h">
+  <h2 id="band-h">Let’s talk.</h2>
+  <dl>
+    <div><dt>Email</dt><dd><a href="mailto:shanoi.jansen@gmail.com">shanoi.jansen@gmail.com</a></dd></div>
+    <div><dt>Phone</dt><dd><a href="tel:+31636495865">06 36 49 58 65</a></dd></div>
+    <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/visualsbynoi/">@visualsbynoi</a></dd></div>
+  </dl>
+</section>
+<div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged image"><button class="close">Close</button><img alt=""></div>
+<div class="book" id="book" role="dialog" aria-modal="true" aria-label="Brand book PUUR">
+  <div class="book-bar"><span id="bookCount">1 / 24</span><button class="close" id="bookClose">Close</button></div>
+  <div class="book-stage">
+    <button class="nav-btn" id="bookPrev" aria-label="Previous page">‹</button>
+    <img id="bookImg" alt="">
+    <button class="nav-btn" id="bookNext" aria-label="Next page">›</button>
+  </div>
+</div>
+<footer><span>© 2026 Shanoi Jansen</span><a href="#home">Back to top</a></footer>
+
+<script>
+(function(){
+  const views={home:'view-home',design:'view-design','photo-video':'view-photo-video',cv:'view-cv',contact:'view-contact'};
+  function route(){
+    let h=(location.hash||'#home').slice(1);
+    if(!views[h]) h='home';
+    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===views[h]));
+    document.querySelectorAll('.nav ul a').forEach(a=>{
+      a.getAttribute('href')==='#'+h?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current');
+    });
+    window.scrollTo(0,0);
+    document.getElementById('contact-band').hidden=(h==='contact');
+    if(window.layoutCollage)requestAnimationFrame(layoutCollage);
+  }
+  addEventListener('hashchange',route);route();
+
+  // filters
+  document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    const f=b.dataset.f;
+    document.querySelectorAll('#designGrid .tile').forEach(w=>w.hidden=!(f==='alle'||w.dataset.cat===f));if(window.layoutCollage)layoutCollage();
+  }));
+
+  // lightbox
+  const lb=document.getElementById('lb'),lbImg=lb.querySelector('img');let last;
+  document.querySelectorAll('.zoom').forEach(b=>b.addEventListener('click',()=>{last=b;lbImg.src=b.dataset.src;lbImg.alt=b.querySelector('img').alt;lb.classList.add('open');lb.querySelector('.close').focus();}));
+  const closeLb=()=>{lb.classList.remove('open');last&&last.focus();};
+  lb.addEventListener('click',e=>{if(e.target!==lbImg)closeLb();});
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('open'))closeLb();});
+  const fv=document.querySelector('.feature-video');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){fv.removeAttribute('autoplay');fv.pause();fv.controls=true;}
+  // brand book viewer
+  const book=document.getElementById('book'),bImg=document.getElementById('bookImg'),bCount=document.getElementById('bookCount'),
+        bPrev=document.getElementById('bookPrev'),bNext=document.getElementById('bookNext'),TOTAL=24;let page=1,bLast;
+  const pad=n=>String(n).padStart(2,'0');
+  function show(n){page=Math.min(TOTAL,Math.max(1,n));bImg.src='img/puur/'+pad(page)+'.webp';bImg.alt='PUUR brand book, page '+page;
+    bCount.textContent=page+' / '+TOTAL;bPrev.disabled=page===1;bNext.disabled=page===TOTAL;
+    [page-1,page+1].forEach(k=>{if(k>=1&&k<=TOTAL){const i=new Image();i.src='img/puur/'+pad(k)+'.webp';}});}
+  document.querySelectorAll('.book-open').forEach(b=>b.addEventListener('click',()=>{bLast=b;show(+b.dataset.page);book.classList.add('open');document.getElementById('bookClose').focus();}));
+  const closeBook=()=>{book.classList.remove('open');bLast&&bLast.focus();};
+  document.getElementById('bookClose').addEventListener('click',closeBook);
+  bPrev.addEventListener('click',()=>show(page-1));bNext.addEventListener('click',()=>show(page+1));
+  addEventListener('keydown',e=>{if(!book.classList.contains('open'))return;
+    if(e.key==='Escape')closeBook();if(e.key==='ArrowRight')show(page+1);if(e.key==='ArrowLeft')show(page-1);});
+  let tx=null;bImg.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  bImg.addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)show(page+(d<0?1:-1));tx=null;});
+
+  // showcase tabs
+  const tabs=[...document.querySelectorAll('.sc-tabs [role=tab]')];
+  function selectTab(t){tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});
+    const v=document.querySelector('#p-kw video');if(v&&!matchMedia('(prefers-reduced-motion: reduce)').matches){t.id==='t-kw'?v.play().catch(()=>{}):v.pause();}}
+  tabs.forEach((t,i)=>{t.addEventListener('click',()=>selectTab(t));t.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];selectTab(n);n.focus();}});});
+
+  // justified collage: every row fills the full width, no ragged edges
+  function layoutOne(coll){
+    const tiles=[...coll.querySelectorAll('.tile')].filter(t=>!t.hidden);if(!tiles.length||!coll.offsetParent)return;
+    const cs=getComputedStyle(coll),W=coll.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),gap=parseFloat(cs.columnGap)||12;
+    const ars=tiles.map(t=>+t.dataset.ar),target=W<600?220:W<1000?280:340;
+    let k=Math.max(1,Math.round(ars.reduce((a,b)=>a+b,0)*target/W));k=Math.min(k,tiles.length);
+    const n=ars.length,pre=[0];ars.forEach(a=>pre.push(pre[pre.length-1]+a));
+    const M=[],D=[];for(let i=0;i<=n;i++){M.push(Array(k+1).fill(Infinity));D.push(Array(k+1).fill(0));}
+    M[0][0]=0;
+    for(let i=1;i<=n;i++)for(let j=1;j<=Math.min(i,k);j++)for(let x=j-1;x<i;x++){
+      const c=Math.max(M[x][j-1],pre[i]-pre[x]);if(c<M[i][j]){M[i][j]=c;D[i][j]=x;}}
+    const cuts=[];let i=n;for(let j=k;j>0;j--){cuts.unshift([D[i][j],i]);i=D[i][j];}
+    cuts.forEach(([a,b])=>{const sum=pre[b]-pre[a],h=(W-gap*(b-a-1))/sum;let used=0;
+      for(let t=a;t<b;t++){let w=t===b-1?(W-gap*(b-a-1))-used:Math.floor(ars[t]*h);used+=w;
+        tiles[t].style.width=w+'px';tiles[t].style.aspectRatio='auto';tiles[t].style.height=Math.round(h)+'px';}});
+  }
+  function layout(){document.querySelectorAll('.collage').forEach(layoutOne);}
+  window.layoutCollage=layout;
+  addEventListener('resize',layout);
+  layout();
+
+  // foto & video tabs
+  const ftabs=[...document.querySelectorAll('.fv-tabs [role=tab]')];
+  function fSel(t){ftabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});
+    document.querySelectorAll('#fp-cases video').forEach(v=>{if(t.id!=='ft-cases')v.pause();});
+    if(window.layoutCollage)requestAnimationFrame(layoutCollage);}
+  ftabs.forEach((t,i)=>{t.addEventListener('click',()=>fSel(t));t.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=ftabs[(i+(e.key==='ArrowRight'?1:ftabs.length-1))%ftabs.length];fSel(n);n.focus();}});});
+
+  // jump to project
+  document.querySelectorAll('.case-nav [data-jump]').forEach(b=>b.addEventListener('click',()=>{
+    const h=document.getElementById(b.dataset.jump);const sec=h.closest('.project');
+    sec.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}));
+
+  // instagram-style sliders
+  document.querySelectorAll('.ig').forEach(ig=>{
+    const track=ig.querySelector('.ig-track'),n=track.children.length,prev=ig.querySelector('.ig-prev'),next=ig.querySelector('.ig-next'),
+          dots=[...ig.querySelectorAll('.ig-dot')],count=ig.querySelector('.ig-count'),vp=ig.querySelector('.ig-viewport');let i=0;
+    function go(k){i=Math.max(0,Math.min(n-1,k));track.style.transform=`translateX(${-i*100}%)`;prev.disabled=i===0;next.disabled=i===n-1;
+      dots.forEach((d,j)=>d.setAttribute('aria-current',j===i));count.textContent=(i+1)+'/'+n;}
+    prev.addEventListener('click',()=>go(i-1));next.addEventListener('click',()=>go(i+1));
+    dots.forEach((d,j)=>d.addEventListener('click',()=>go(j)));
+    ig.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(i+1);if(e.key==='ArrowLeft')go(i-1);});
+    let x0=null,dx=0;
+    vp.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;x0=e.clientX;dx=0;track.style.transition='none';vp.setPointerCapture(e.pointerId);});
+    vp.addEventListener('pointermove',e=>{if(x0===null)return;dx=e.clientX-x0;track.style.transform=`translateX(calc(${-i*100}% + ${dx}px))`;});
+    const end=()=>{if(x0===null)return;track.style.transition='';const w=vp.clientWidth;x0=null;if(Math.abs(dx)>w*.15)go(i+(dx<0?1:-1));else go(i);};
+    vp.addEventListener('pointerup',end);vp.addEventListener('pointercancel',end);
+    go(0);
+  });
+
+  // hide filters without projects
+  document.querySelectorAll('.filters button').forEach(b=>{if(b.dataset.f!=='alle'&&!document.querySelector('#designGrid .tile[data-cat="'+b.dataset.f+'"]'))b.hidden=true;});
+
+  // misregistration follows pointer
+  const hero=document.getElementById('hero'),layer=hero.querySelector('.layer');
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    hero.addEventListener('pointermove',e=>{
+      const r=hero.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      layer.style.setProperty('--dx',(x*28).toFixed(1)+'px');
+      layer.style.setProperty('--dy',(y*20).toFixed(1)+'px');
+    });
+    hero.addEventListener('pointerleave',()=>{layer.style.removeProperty('--dx');layer.style.removeProperty('--dy');});
+  }
+})();
+</script>
+</body>
+</html>
