@@ -175,6 +175,13 @@ footer{display:flex;justify-content:space-between;gap:20px;padding:20px var(--pa
 .ig-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
 .ig-dot{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
 .ig-dot[aria-current="true"]{background:var(--blue)}
+.collage.gridbooks{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px) clamp(10px,1.4vw,18px)}
+.collage.gridbooks .tile{width:auto!important;height:auto!important;aspect-ratio:3/2!important}
+.book-tile{position:relative;cursor:pointer!important;background:var(--ink)!important}
+.book-tile img{box-shadow:none!important}
+.book-tile::after{content:attr(data-label);position:absolute;left:12px;bottom:12px;background:var(--paper);color:var(--ink);font:600 14px var(--body);padding:6px 12px;border-radius:999px;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.book-tile:hover::after,.book-tile:focus-visible::after,.gridbooks .book-tile::after{opacity:1;transform:none}
+@media (max-width:780px){.collage.gridbooks{grid-template-columns:1fr}}
 .filters{display:flex;flex-wrap:wrap;gap:10px;padding:0 var(--pad) 28px}
 .filters button{font:600 15px var(--body);padding:9px 16px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
 .filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
@@ -326,7 +333,7 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
 <nav class="nav" aria-label="Main menu">
   <a class="logo" href="#home">Shanoi Jansen</a>
   <ul>
-    <li><a href="#design">Design</a></li>
+    <li><a href="#design">Branding</a></li>
     <li><a href="#photo-video">Photo &amp; video</a></li>
     <li><a href="#cv">CV</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -341,7 +348,7 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
       <h1 class="hero-name">Shanoi Jansen<span class="dot">.</span></h1>
       <p class="hero-sub">26-year-old graphic designer, photographer and videographer based in Amsterdam, with over 5 years of experience.</p>
       <div class="btns">
-        <a class="btn solid" href="#design">View design</a>
+        <a class="btn solid" href="#design">View branding</a>
         <a class="btn" href="#photo-video">View photo &amp; video</a>
       </div>
     </div>
@@ -350,7 +357,7 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
 
   <section class="doors" aria-label="Work"><img class="door-peek" alt="" aria-hidden="true">
     <a class="door" href="#design" data-preview="img/peek-design.webp">
-      <h2>Design</h2>
+      <h2>Branding</h2>
       <ul><li>Brand identity</li><li>Campaigns &amp; social media</li><li>Web design</li><li>Packaging</li></ul>
     </a>
     <a class="door" href="#photo-video" data-preview="img/peek-photo.webp">
@@ -375,7 +382,7 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
 <!-- DESIGN -->
 <main id="view-design" class="view">
   <header class="section-head">
-    <h1>Design</h1>
+    <h1>Branding</h1>
     <p>Brand identities, web design, campaigns, posters, flyers, packaging and social media posts for a range of clients.</p>
   </header>
   <section class="case-launch" aria-labelledby="dl-h">
@@ -455,8 +462,8 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
 
     <div class="sc-panel" role="tabpanel" id="p-puur" aria-labelledby="t-puur" hidden>
       <div class="sc-media book-grid">
-        <button class="book-open cover" data-page="1" aria-label="Open brand book PUUR"><img src="img/puur/01.webp" alt="PUUR brand book, cover" loading="lazy"></button>
-        <div class="book-thumbs"><button class="book-open" data-page="4" aria-label="Open brand book at page 4"><img src="img/puur/04.webp" alt="" loading="lazy"></button><button class="book-open" data-page="9" aria-label="Open brand book at page 9"><img src="img/puur/09.webp" alt="" loading="lazy"></button><button class="book-open" data-page="15" aria-label="Open brand book at page 15"><img src="img/puur/15.webp" alt="" loading="lazy"></button><button class="book-open" data-page="17" aria-label="Open brand book at page 17"><img src="img/puur/17.webp" alt="" loading="lazy"></button><button class="book-open" data-page="20" aria-label="Open brand book at page 20"><img src="img/puur/20.webp" alt="" loading="lazy"></button><button class="book-open" data-page="23" aria-label="Open brand book at page 23"><img src="img/puur/23.webp" alt="" loading="lazy"></button></div>
+        <button class="book-open cover" data-book="puur" data-page="1" aria-label="Open brand book PUUR"><img src="img/puur/01.webp" alt="PUUR brand book, cover" loading="lazy"></button>
+        <div class="book-thumbs"><button class="book-open" data-book="puur" data-page="4" aria-label="Open brand book at page 4"><img src="img/puur/04.webp" alt="" loading="lazy"></button><button class="book-open" data-book="puur" data-page="9" aria-label="Open brand book at page 9"><img src="img/puur/09.webp" alt="" loading="lazy"></button><button class="book-open" data-book="puur" data-page="15" aria-label="Open brand book at page 15"><img src="img/puur/15.webp" alt="" loading="lazy"></button><button class="book-open" data-book="puur" data-page="17" aria-label="Open brand book at page 17"><img src="img/puur/17.webp" alt="" loading="lazy"></button><button class="book-open" data-book="puur" data-page="20" aria-label="Open brand book at page 20"><img src="img/puur/20.webp" alt="" loading="lazy"></button><button class="book-open" data-book="puur" data-page="23" aria-label="Open brand book at page 23"><img src="img/puur/23.webp" alt="" loading="lazy"></button></div>
       </div>
       <div class="sc-body sc-top">
         <div>
@@ -466,7 +473,7 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
         </div>
         <div>
           <dl class="role"><dt>My role</dt><dd>Developed the complete brand identity from scratch and documented it in a brand book, plus branding for business cards and vehicle graphics.</dd></dl>
-          <button class="btn light book-open" data-page="1">View the brand book (24 pages)</button>
+          <button class="btn light book-open" data-book="puur" data-page="1">View the brand book (24 pages)</button>
         </div>
       </div>
     </div>
@@ -477,6 +484,7 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
     <button aria-pressed="true" data-f="alle">All</button>
     <button aria-pressed="false" data-f="campagne">Campaigns &amp; social posts</button>
     <button aria-pressed="false" data-f="verpakking">Packaging</button>
+    <button aria-pressed="false" data-f="brandbook">Brand books</button>
   </div>
   <div class="collage" id="designGrid">
     <button class="zoom tile" data-ar="1.333" data-cat="campagne" data-src="img/design/cocomora.webp" aria-label="Enlarge: Cocomora perfume poster in the metro"><img src="img/design/cocomora.webp" alt="Cocomora perfume poster in the metro" loading="lazy"></button>
@@ -495,6 +503,9 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
     <button class="zoom tile" data-ar="1.500" data-cat="campagne" data-src="img/design/start-moving.webp" aria-label="Enlarge: Start Moving billboard"><img src="img/design/start-moving.webp" alt="Start Moving billboard" loading="lazy"></button>
     <button class="zoom tile" data-ar="0.899" data-cat="verpakking" data-src="img/design/ollie.webp" aria-label="Enlarge: Ollie protein pancakes packaging"><img src="img/design/ollie.webp" alt="Ollie protein pancakes packaging" loading="lazy"></button>
     <button class="zoom tile" data-ar="1.779" data-cat="campagne" data-src="img/design/only-limit.webp" aria-label="Enlarge: ‘You are your only limit’ billboard"><img src="img/design/only-limit.webp" alt="‘You are your only limit’ billboard" loading="lazy"></button>
+    <button class="tile book-open book-tile" data-cat="brandbook" data-ar="1.778" data-book="betti" data-page="1" data-label="Betti Ortho · 39 pages" aria-label="Open brand book Betti Ortho, 39 pages"><img src="img/betti/01.webp" alt="Betti Ortho brand book, cover" loading="lazy"></button>
+    <button class="tile book-open book-tile" data-cat="brandbook" data-ar="1.415" data-book="puur" data-page="1" data-label="PUUR Facility Partners · 24 pages" aria-label="Open brand book PUUR Facility Partners, 24 pages"><img src="img/puur/01.webp" alt="PUUR Facility Partners brand book, cover" loading="lazy"></button>
+    <button class="tile book-open book-tile" data-cat="brandbook" data-ar="1.415" data-book="experteeth" data-page="1" data-label="Experteeth · 17 pages" aria-label="Open brand book Experteeth, 17 pages"><img src="img/experteeth/01.webp" alt="Experteeth brand book, cover" loading="lazy"></button>
   </div>
 </main>
 
@@ -709,7 +720,7 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
   </dl>
 </section>
 <div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged image"><button class="close">Close</button><img alt=""></div>
-<div class="book" id="book" role="dialog" aria-modal="true" aria-label="Brand book PUUR">
+<div class="book" id="book" role="dialog" aria-modal="true" aria-label="Brand book">
   <div class="book-bar"><span id="bookCount">1 / 24</span><button class="close" id="bookClose">Close</button></div>
   <div class="book-stage">
     <button class="nav-btn" id="bookPrev" aria-label="Previous page">‹</button>
@@ -739,7 +750,7 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
   document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));
     const f=b.dataset.f;
-    document.querySelectorAll('#designGrid .tile').forEach(w=>w.hidden=!(f==='alle'||w.dataset.cat===f));const g=document.getElementById('designGrid');g.classList.toggle('grid3',f==='verpakking');if(f==='verpakking'){g.querySelectorAll('.tile').forEach(t=>{t.style.width='';t.style.height='';t.style.aspectRatio='';});}else if(window.layoutCollage)layoutCollage();
+    document.querySelectorAll('#designGrid .tile').forEach(w=>w.hidden=!(f==='alle'||w.dataset.cat===f));const g=document.getElementById('designGrid');g.classList.toggle('grid3',f==='verpakking');g.classList.toggle('gridbooks',f==='brandbook');if(f==='verpakking'||f==='brandbook'){g.querySelectorAll('.tile').forEach(t=>{t.style.width='';t.style.height='';t.style.aspectRatio='';});}else if(window.layoutCollage)layoutCollage();
   }));
 
   // lightbox
@@ -752,12 +763,12 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){fv.removeAttribute('autoplay');fv.pause();fv.controls=true;}
   // brand book viewer
   const book=document.getElementById('book'),bImg=document.getElementById('bookImg'),bCount=document.getElementById('bookCount'),
-        bPrev=document.getElementById('bookPrev'),bNext=document.getElementById('bookNext'),TOTAL=24;let page=1,bLast;
+        bPrev=document.getElementById('bookPrev'),bNext=document.getElementById('bookNext');const BOOKS={puur:{n:24,name:'PUUR'},experteeth:{n:17,name:'Experteeth'},betti:{n:39,name:'Betti'}};let TOTAL=24,dir='puur',page=1,bLast;
   const pad=n=>String(n).padStart(2,'0');
-  function show(n){page=Math.min(TOTAL,Math.max(1,n));bImg.src='img/puur/'+pad(page)+'.webp';bImg.alt='PUUR brand book, page '+page;
+  function show(n){page=Math.min(TOTAL,Math.max(1,n));bImg.src='img/'+dir+'/'+pad(page)+'.webp';bImg.alt=BOOKS[dir].name+' brand book, page '+page;
     bCount.textContent=page+' / '+TOTAL;bPrev.disabled=page===1;bNext.disabled=page===TOTAL;
-    [page-1,page+1].forEach(k=>{if(k>=1&&k<=TOTAL){const i=new Image();i.src='img/puur/'+pad(k)+'.webp';}});}
-  document.querySelectorAll('.book-open').forEach(b=>b.addEventListener('click',()=>{bLast=b;show(+b.dataset.page);book.classList.add('open');document.getElementById('bookClose').focus();}));
+    [page-1,page+1].forEach(k=>{if(k>=1&&k<=TOTAL){const i=new Image();i.src='img/'+dir+'/'+pad(k)+'.webp';}});}
+  document.querySelectorAll('.book-open').forEach(b=>b.addEventListener('click',()=>{bLast=b;dir=b.dataset.book||'puur';TOTAL=BOOKS[dir].n;book.setAttribute('aria-label','Brand book '+BOOKS[dir].name);show(+b.dataset.page);book.classList.add('open');document.getElementById('bookClose').focus();}));
   const closeBook=()=>{book.classList.remove('open');bLast&&bLast.focus();};
   document.getElementById('bookClose').addEventListener('click',closeBook);
   bPrev.addEventListener('click',()=>show(page-1));bNext.addEventListener('click',()=>show(page+1));
@@ -774,7 +785,7 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
     if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];selectTab(n);n.focus();}});});
 
   // justified collage: every row fills the full width, no ragged edges
-  function layoutOne(coll){if(coll.classList.contains('grid3'))return;
+  function layoutOne(coll){if(coll.classList.contains('grid3')||coll.classList.contains('gridbooks'))return;
     const tiles=[...coll.querySelectorAll('.tile')].filter(t=>!t.hidden);if(!tiles.length||!coll.offsetParent)return;
     const cs=getComputedStyle(coll),W=coll.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),gap=parseFloat(cs.columnGap)||12;
     const ars=tiles.map(t=>+t.dataset.ar),target=W<600?220:W<1000?280:340;
