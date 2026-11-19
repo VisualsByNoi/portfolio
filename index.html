@@ -161,6 +161,7 @@ footer{display:flex;justify-content:space-between;gap:20px;padding:20px var(--pa
 .deliv-text h3{font:800 clamp(22px,2.2vw,30px)/1.05 var(--display);font-stretch:115%;color:var(--blue);margin-bottom:10px}
 .deliv-text p:not(.meta){max-width:40ch}
 .deliv-text .hint{color:var(--grey);font-size:15px;margin-top:14px}
+.deliv-media.single{max-width:520px;margin:0 auto;width:100%}
 .deliv-media.cols-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.4vw,18px)}
 .ig{max-width:520px;margin:0 auto}
 .ig-viewport{position:relative;overflow:hidden;aspect-ratio:4/5;background:#E4E6EC;touch-action:pan-y;user-select:none}
@@ -385,6 +386,41 @@ h1,h2,h3,.nav .logo,.door h2,.overprint,.sc-title,.contact h1,.contact-band h2,.
     <h1>Branding</h1>
     <p>Brand identities, web design, campaigns, posters, flyers, packaging and social media posts for a range of clients.</p>
   </header>
+  <section class="case-launch" aria-labelledby="ski-h">
+    <div class="cl-head">
+      <div>
+        <p class="tag">Social branding example</p>
+        <h2 id="ski-h">Drs Leenarts</h2>
+      </div>
+      <div>
+        <p class="meta">Suncare Ski, paid ad &amp; Instagram</p>
+        <p>A paid social ad and an organic Instagram post for Suncare Ski by Drs Leenarts, the SPF50 face and lip protection made for the slopes.</p>
+      </div>
+    </div>
+
+    <div class="mosaic"><button class="zoom m-tile" data-src="img/leenarts-ski/paid-ad.webp" aria-label="Enlarge: Ad: Klaar voor de piste"><img src="img/leenarts-ski/paid-ad.webp" alt="Drs Leenarts, Ad: Klaar voor de piste" loading="lazy"></button><button class="zoom m-tile" data-src="img/leenarts-ski/slide-1.webp" aria-label="Enlarge: Het bekendste skiprobleem, vergeten in te smeren?"><img src="img/leenarts-ski/slide-1.webp" alt="Drs Leenarts, Het bekendste skiprobleem, vergeten in te smeren?" loading="lazy"></button><button class="zoom m-tile" data-src="img/leenarts-ski/slide-2.webp" aria-label="Enlarge: De oplossing voor op de piste"><img src="img/leenarts-ski/slide-2.webp" alt="Drs Leenarts, De oplossing voor op de piste" loading="lazy"></button><button class="zoom m-tile" data-src="img/leenarts-ski/extra-1.webp" aria-label="Enlarge: Reminder: vergeet je zonnebrand ook niet in de sneeuw"><img src="img/leenarts-ski/extra-1.webp" alt="Drs Leenarts, Reminder: vergeet je zonnebrand ook niet in de sneeuw" loading="lazy"></button><button class="zoom m-tile" data-src="img/leenarts-ski/extra-2.webp" aria-label="Enlarge: Top van de berg, verdiend top bescherming"><img src="img/leenarts-ski/extra-2.webp" alt="Drs Leenarts, Top van de berg, verdiend top bescherming" loading="lazy"></button></div>
+
+    <div class="deliv">
+      <div class="deliv-text"><h3>Paid social ad</h3><p class="meta">Meta, 4:5</p><p>An ad that puts the product in the snow, highlights its three key benefits and leads straight to the shop.</p></div>
+      <div class="deliv-media single"><button class="zoom" data-src="img/leenarts-ski/paid-ad.webp" aria-label="Enlarge: Ad: Klaar voor de piste"><img src="img/leenarts-ski/paid-ad.webp" alt="Drs Leenarts, Ad: Klaar voor de piste" loading="lazy"></button></div>
+    </div>
+    <div class="deliv">
+      <div class="deliv-text"><h3>Organic Instagram post</h3><p class="meta">Instagram, swipe post</p><p>A two-slide carousel that starts with a recognisable problem on the slopes and swipes to the solution.</p><p class="hint">Swipe or use the arrows to browse.</p></div>
+      <div class="deliv-media"><div class="ig" aria-roledescription="carousel" aria-label="Suncare Ski carousel">
+          <div class="ig-viewport"><div class="ig-track"><div class="ig-slide" role="group" aria-roledescription="slide" aria-label="1 of 2"><img src="img/leenarts-ski/slide-1.webp" alt="Drs Leenarts, Het bekendste skiprobleem, vergeten in te smeren?" loading="lazy" draggable="false"></div><div class="ig-slide" role="group" aria-roledescription="slide" aria-label="2 of 2"><img src="img/leenarts-ski/slide-2.webp" alt="Drs Leenarts, De oplossing voor op de piste" loading="lazy" draggable="false"></div></div>
+            <button class="ig-nav ig-prev" aria-label="Previous slide">‹</button>
+            <button class="ig-nav ig-next" aria-label="Next slide">›</button>
+            <span class="ig-count">1/2</span>
+          </div>
+          <div class="ig-dots"><button class="ig-dot" aria-label="Go to slide 1"></button><button class="ig-dot" aria-label="Go to slide 2"></button></div>
+        </div></div>
+    </div>
+    <div class="deliv">
+      <div class="deliv-text"><h3>Extra Instagram posts</h3><p class="meta">Instagram</p><p>Two additional posts in the same campaign style.</p></div>
+      <div class="deliv-media cols-2"><button class="zoom" data-src="img/leenarts-ski/extra-1.webp" aria-label="Enlarge: Reminder: vergeet je zonnebrand ook niet in de sneeuw"><img src="img/leenarts-ski/extra-1.webp" alt="Drs Leenarts, Reminder: vergeet je zonnebrand ook niet in de sneeuw" loading="lazy"></button><button class="zoom" data-src="img/leenarts-ski/extra-2.webp" aria-label="Enlarge: Top van de berg, verdiend top bescherming"><img src="img/leenarts-ski/extra-2.webp" alt="Drs Leenarts, Top van de berg, verdiend top bescherming" loading="lazy"></button></div>
+    </div>
+  </section>
+
   <section class="case-launch" aria-labelledby="dl-h">
     <div class="cl-head">
       <div>
